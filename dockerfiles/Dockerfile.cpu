@@ -1,0 +1,16 @@
+FROM jupyter/base-notebook:latest
+
+USER root
+
+RUN set -x \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends \
+    git git-lfs unrar graphviz \    
+  && rm -rf /var/lib/apt/lists/*
+
+
+USER $NB_UID
+
+RUN pip install pandas huggingface_hub tokenizers sentencepiece transformers datasets[streaming] scikit-learn nltk bltk spacy ipywidgets sentencepiece protobuf https://github.com/mchaput/whoosh/archive/nextgen.zip dask[complete] dask-ml https://github.com/LIAAD/yake/archive/master.zip graphviz https://github.com/TutteInstitute/vectorizers/archive/master.zip umap-learn[plot] seaborn pywaffle plotly beautifulsoup4
+
+# RUN python -m spacy download en_core_web_lg
