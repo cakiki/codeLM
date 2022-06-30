@@ -1,0 +1,3 @@
+[submodule "external/ReACC"]
+	path = external/ReACC
+	url = https://github.com/microsoft/ReACC.git
