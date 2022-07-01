@@ -28,9 +28,13 @@ class RosettaSpider(scrapy.Spider):
         toc_links = toc_links = response.xpath('//div[@id="toc"]/ul/li/a/@href').getall()
         toc_languages = response.xpath('//div[@id="toc"]/ul/li/a/span[@class="toctext"]').getall()
         assert len(toc_links) == len(toc_languages)
+        task_description = response.xpath('//div[@id="mw-content-text"]//div[@id="toc"]/preceding-sibling::*').getall()
+        task_description = '\n'.join([bs_strip_tags(i.replace('<br>', '\n')) for i in task_description[1:]])
         for link, language in zip(toc_links, toc_languages):
             yield {
                 "task_url": response.url,
+                "task_name": response.xpath('//h1[@id="firstHeading"]/text()').get(),
+                "task_description": task_description,
                 "language_url": link,
                 "language_name": bs_strip_tags(language),
                 "code": bs_strip_tags(response.xpath(f'//h2[span[@id="{link[1:]}"]]/following-sibling::pre').get().replace('<br>', '\n')),
